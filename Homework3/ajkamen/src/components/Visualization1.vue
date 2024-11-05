@@ -1,10 +1,16 @@
 <template>
   <div v-if="data">
-    <h2 class="chart-title">Average Income by Selected Category with Risk Distribution</h2>
+    <h2 class="chart-title">
+      Average Income by Selected Category with Risk Distribution
+    </h2>
 
     <!-- Bracket Selection Buttons -->
     <div class="bracket-buttons">
-      <button v-for="option in xAxisOptions" :key="option" @click="setXAxis(option)">
+      <button
+        v-for="option in xAxisOptions"
+        :key="option"
+        @click="setXAxis(option)"
+      >
         {{ option }}
       </button>
     </div>
@@ -14,13 +20,16 @@
       <div ref="barChart"></div>
       <div class="legend">
         <div class="legend-item">
-          <span class="legend-color" style="background-color: blue"></span> Low Risk
+          <span class="legend-color" style="background-color: blue"></span> Low
+          Risk
         </div>
         <div class="legend-item">
-          <span class="legend-color" style="background-color: orange"></span> Medium Risk
+          <span class="legend-color" style="background-color: orange"></span>
+          Medium Risk
         </div>
         <div class="legend-item">
-          <span class="legend-color" style="background-color: red"></span> High Risk
+          <span class="legend-color" style="background-color: red"></span> High
+          Risk
         </div>
       </div>
     </div>
@@ -34,24 +43,29 @@ import * as d3 from 'd3'
 
 export default {
   props: ['data'],
-data() {
-  return {
-    xAxisCategory: 'Age Bracket', // Default x-axis category
-    xAxisOptions: ['Age Bracket', 'Credit Score Bracket', 'Loan Amount Bracket', 'Debt-to-Income Ratio Bracket'], // Removed 'Income Bracket'
-  }
-},
-computed: {
-  formattedXAxisOptions() {
-    // Remove " Bracket" from each option's label for display
-    return this.xAxisOptions.map(option => option.replace(' Bracket', ''))
-  }
-},
-mounted() {
-  if (this.data) {
-    this.addBrackets()
-    this.drawBarChart()
-  }
-},
+  data() {
+    return {
+      xAxisCategory: 'Age Bracket', // Default x-axis category
+      xAxisOptions: [
+        'Age Bracket',
+        'Credit Score Bracket',
+        'Loan Amount Bracket',
+        'Debt-to-Income Ratio Bracket',
+      ], // Removed 'Income Bracket'
+    }
+  },
+  computed: {
+    formattedXAxisOptions() {
+      // Remove " Bracket" from each option's label for display
+      return this.xAxisOptions.map(option => option.replace(' Bracket', ''))
+    },
+  },
+  mounted() {
+    if (this.data) {
+      this.addBrackets()
+      this.drawBarChart()
+    }
+  },
   methods: {
     addBrackets() {
       this.data.forEach(d => {
@@ -88,11 +102,16 @@ mounted() {
         else d['Loan Amount Bracket'] = '38k-50k'
 
         // Debt-to-Income Ratio Bracket
-        if (d['Debt-to-Income Ratio'] <= 0.2) d['Debt-to-Income Ratio Bracket'] = '0.1-0.2'
-        else if (d['Debt-to-Income Ratio'] <= 0.3) d['Debt-to-Income Ratio Bracket'] = '0.2-0.3'
-        else if (d['Debt-to-Income Ratio'] <= 0.4) d['Debt-to-Income Ratio Bracket'] = '0.3-0.4'
-        else if (d['Debt-to-Income Ratio'] <= 0.5) d['Debt-to-Income Ratio Bracket'] = '0.4-0.5'
-        else if (d['Debt-to-Income Ratio'] <= 0.6) d['Debt-to-Income Ratio Bracket'] = '0.5-0.6'
+        if (d['Debt-to-Income Ratio'] <= 0.2)
+          d['Debt-to-Income Ratio Bracket'] = '0.1-0.2'
+        else if (d['Debt-to-Income Ratio'] <= 0.3)
+          d['Debt-to-Income Ratio Bracket'] = '0.2-0.3'
+        else if (d['Debt-to-Income Ratio'] <= 0.4)
+          d['Debt-to-Income Ratio Bracket'] = '0.3-0.4'
+        else if (d['Debt-to-Income Ratio'] <= 0.5)
+          d['Debt-to-Income Ratio Bracket'] = '0.4-0.5'
+        else if (d['Debt-to-Income Ratio'] <= 0.6)
+          d['Debt-to-Income Ratio Bracket'] = '0.5-0.6'
         else d['Debt-to-Income Ratio Bracket'] = '0.6+'
       })
     },
@@ -108,16 +127,48 @@ mounted() {
       const sortedData = groupedData.sort(([a], [b]) => {
         const orderMap = {
           'Age Bracket': ['18-24', '25-34', '35-44', '45-54', '55-64', '65+'],
-          'Income Bracket': ['20k-36k', '36k-53k', '53k-70k', '70k-86k', '86k-103k', '103k-120k'],
-          'Credit Score Bracket': ['600-633', '634-666', '667-699', '700-733', '734-766', '767-799'],
-          'Loan Amount Bracket': ['5k-12k', '12k-18k', '18k-25k', '25k-32k', '32k-38k', '38k-50k'],
-          'Debt-to-Income Ratio Bracket': ['0.1-0.2', '0.2-0.3', '0.3-0.4', '0.4-0.5', '0.5-0.6', '0.6+']
+          'Income Bracket': [
+            '20k-36k',
+            '36k-53k',
+            '53k-70k',
+            '70k-86k',
+            '86k-103k',
+            '103k-120k',
+          ],
+          'Credit Score Bracket': [
+            '600-633',
+            '634-666',
+            '667-699',
+            '700-733',
+            '734-766',
+            '767-799',
+          ],
+          'Loan Amount Bracket': [
+            '5k-12k',
+            '12k-18k',
+            '18k-25k',
+            '25k-32k',
+            '32k-38k',
+            '38k-50k',
+          ],
+          'Debt-to-Income Ratio Bracket': [
+            '0.1-0.2',
+            '0.2-0.3',
+            '0.3-0.4',
+            '0.4-0.5',
+            '0.5-0.6',
+            '0.6+',
+          ],
         }
-        return orderMap[xAxisCategory].indexOf(a) - orderMap[xAxisCategory].indexOf(b)
+        return (
+          orderMap[xAxisCategory].indexOf(a) -
+          orderMap[xAxisCategory].indexOf(b)
+        )
       })
 
       const processedData = sortedData.map(([key, groupData]) => {
-        const averageIncome = groupData.length > 0 ? d3.mean(groupData, d => +d['Income']) : 0
+        const averageIncome =
+          groupData.length > 0 ? d3.mean(groupData, d => +d['Income']) : 0
 
         const riskCounts = d3.rollup(
           groupData,
@@ -128,7 +179,8 @@ mounted() {
         const totalPeople = d3.sum([...riskCounts.values()])
 
         const lowRiskPercentage = (riskCounts.get('Low') || 0) / totalPeople
-        const mediumRiskPercentage = (riskCounts.get('Medium') || 0) / totalPeople
+        const mediumRiskPercentage =
+          (riskCounts.get('Medium') || 0) / totalPeople
         const highRiskPercentage = (riskCounts.get('High') || 0) / totalPeople
 
         return {
@@ -146,14 +198,16 @@ mounted() {
       const height = 300
       const margin = { top: 40, right: 30, bottom: 60, left: 60 }
 
-      d3.select(this.$refs.barChart).select("svg").remove() // Clear existing SVG before redraw
+      d3.select(this.$refs.barChart).select('svg').remove() // Clear existing SVG before redraw
 
       const svg = d3
         .select(this.$refs.barChart)
         .append('svg')
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
-        .call(d3.zoom().on("zoom", event => svg.attr("transform", event.transform)))
+        .call(
+          d3.zoom().on('zoom', event => svg.attr('transform', event.transform)),
+        )
         .append('g')
         .attr('transform', `translate(${margin.left}, ${margin.top})`)
 
@@ -179,9 +233,10 @@ mounted() {
       svg
         .append('g')
         .call(
-          d3.axisLeft(y)
+          d3
+            .axisLeft(y)
             .ticks(10)
-            .tickFormat(d => `$${d / 1000}k`)
+            .tickFormat(d => `$${d / 1000}k`),
         )
         .selectAll('text')
         .style('fill', 'black')
@@ -245,7 +300,12 @@ mounted() {
             .transition()
             .duration(800)
             .delay(400)
-            .attr('y', y(d.averageIncome * (d.risks.high + d.risks.medium + d.risks.low)))
+            .attr(
+              'y',
+              y(
+                d.averageIncome * (d.risks.high + d.risks.medium + d.risks.low),
+              ),
+            )
             .attr('height', height - y(d.averageIncome * d.risks.low))
 
           barGroup

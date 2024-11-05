@@ -1,7 +1,9 @@
 <template>
   <div v-if="data" class="invisible-chart-container">
-    <h2 class="chart-title">{{ selectedCategory }} Distribution of {{ selectedRisk }}-Risk Clients</h2>
-    
+    <h2 class="chart-title">
+      {{ selectedCategory }} Distribution of {{ selectedRisk }}-Risk Clients
+    </h2>
+
     <!-- Dropdown for selecting risk level -->
     <div class="filter-dropdown">
       <label for="riskSelect">Select Risk Level: </label>
@@ -15,7 +17,11 @@
     <!-- Dropdown for selecting category -->
     <div class="filter-dropdown">
       <label for="categorySelect">Select Category: </label>
-      <select id="categorySelect" v-model="selectedCategory" @change="updateChart">
+      <select
+        id="categorySelect"
+        v-model="selectedCategory"
+        @change="updateChart"
+      >
         <option value="Gender">Gender</option>
         <option value="Years at Current Job">Years at Current Job</option>
         <option value="Employment Status">Employment Status</option>
@@ -26,9 +32,9 @@
     <div class="pie-chart-box">
       <div ref="pieChart"></div>
       <div class="legend">
-        <div 
-          v-for="(color, label) in currentLegend" 
-          :key="label" 
+        <div
+          v-for="(color, label) in currentLegend"
+          :key="label"
           class="legend-item"
         >
           <span class="legend-color" :style="{ backgroundColor: color }"></span>
@@ -103,7 +109,9 @@ export default {
       this.drawPieChart() // Redraw chart with new data
     },
     drawPieChart() {
-      const filteredData = this.data.filter(d => d['Risk Rating'] === this.selectedRisk)
+      const filteredData = this.data.filter(
+        d => d['Risk Rating'] === this.selectedRisk,
+      )
 
       let categoryCount
       if (this.selectedCategory === 'Gender') {
@@ -184,7 +192,7 @@ export default {
         .style('stroke-width', '2px')
         .transition()
         .duration(800)
-        .attrTween('d', function(d) {
+        .attrTween('d', function (d) {
           const i = d3.interpolate(d.startAngle + 0.1, d.endAngle)
           return t => {
             d.endAngle = i(t)
@@ -194,25 +202,29 @@ export default {
 
       svg
         .selectAll('path')
-        .on('mouseover', function(event, d) {
-          tooltip
-            .style('opacity', 1)
-            .html(
-              `<strong>${d.data.category}</strong><br/>
+        .on('mouseover', function (event, d) {
+          tooltip.style('opacity', 1).html(
+            `<strong>${d.data.category}</strong><br/>
                Count: ${d.data.count}<br/>
-               Percentage: ${(d.data.count / totalCount * 100).toFixed(1)}%`,
-            )
+               Percentage: ${((d.data.count / totalCount) * 100).toFixed(1)}%`,
+          )
           d3.select(this)
             .transition()
             .duration(200)
-            .attr('d', d3.arc().innerRadius(0).outerRadius(radius + 10))
+            .attr(
+              'd',
+              d3
+                .arc()
+                .innerRadius(0)
+                .outerRadius(radius + 10),
+            )
         })
-        .on('mousemove', function(event) {
+        .on('mousemove', function (event) {
           tooltip
             .style('left', event.pageX + 10 + 'px')
             .style('top', event.pageY - 30 + 'px')
         })
-        .on('mouseout', function() {
+        .on('mouseout', function () {
           tooltip.style('opacity', 0)
           d3.select(this)
             .transition()
